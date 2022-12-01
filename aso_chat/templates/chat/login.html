@@ -1,0 +1,23 @@
+{% extends "chat/base.html" %} {% block content %}
+<div class="container-login">
+  <div class="screen">
+    <div class="login">
+      <h2 class="active">sign in</h2>
+
+      <form method="post" action=".">
+        {% csrf_token %}
+        <input type="text" class="text" name="username" />
+        <span>username</span>
+
+        <input type="password" class="text" name="password" />
+        <span>password</span>
+
+        <button class="signin">Sign In</button>
+        <hr />
+
+        <a href="register">Register</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock%}

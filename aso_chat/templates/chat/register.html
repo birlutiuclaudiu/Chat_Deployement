@@ -1,0 +1,41 @@
+{% extends "chat/base.html" %} {% block content %}
+<div class="container-login">
+  <div class="screen">
+    <div class="login">
+      <h2 class="active">Register</h2>
+      <form method="post" action=".">
+        {% csrf_token %}
+        <input
+          type="text"
+          class="text"
+          name="first_name"
+          placeholder="First name"
+        />
+        <input
+          type="text"
+          class="text"
+          name="last_name"
+          placeholder="Last name"
+        />
+        <input
+          type="text"
+          class="text"
+          name="username"
+          placeholder="username/email"
+        />
+        <input
+          type="password"
+          class="text"
+          name="password"
+          placeholder="password"
+        />
+        <button class="signin">Register</button>
+        <hr />
+
+        <a href="/aso-chat">Sign in</a>
+      </form>
+    </div>
+  </div>
+
+  {% endblock%}
+</div>
