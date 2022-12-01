@@ -34,6 +34,7 @@
     {{ chat_box_name|json_script:"room-name" }}
     <script>
         const user_username = JSON.parse(document.getElementById('user_username').textContent);
+        console.log(user_username)
         document.querySelector('#submit').onclick = function (e) {
            const messageInputDom = document.querySelector('#input');
            const message = messageInputDom.value;
@@ -44,8 +45,9 @@
            messageInputDom.value = '';
         };
      
-        const boxName = JSON.parse(document.getElementById('box-name').textContent);
-        # Create a WebSocket in JavaScript.
+        const boxName = JSON.parse(document.getElementById('room-name').textContent);
+        console.log(boxName);
+      
         const chatSocket = new WebSocket(
            'ws://' +
            window.location.host +

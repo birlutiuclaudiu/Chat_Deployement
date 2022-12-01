@@ -71,7 +71,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "claudiu_first_site.wsgi.application"
-ASGI_APPLICATION = "claudiu_first_site.asgi.application"
 
 
 # Database
@@ -128,12 +127,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Login and logout part 
-LOGOUT_REDIRECT_URL = "/aso-chat/login"
+LOGOUT_REDIRECT_URL = "/aso-chat/login/"
 LOGIN_REDIRECT_URL = "/aso-chat/"
-LOGIN_URL = "/aso-chat/login"
+LOGIN_URL = "/aso-chat/login/"
 
 
-# websocket  
+# websockets  
+ASGI_APPLICATION = "claudiu_first_site.routing.application" #routing.py will be created later
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': "channels.layers.InMemoryChannelLayer"

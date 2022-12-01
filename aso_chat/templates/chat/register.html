@@ -26,13 +26,26 @@
         <input
           type="password"
           class="text"
-          name="password"
+          name="password1"
           placeholder="password"
         />
+        <input
+          type="password"
+          class="text"
+          name="password2"
+          placeholder="Retype password"
+        />
+
         <button class="signin">Register</button>
         <hr />
 
         <a href="/aso-chat">Sign in</a>
+        {% if form.errors %} {% for field in form %} 
+        {% for error in field.errors %}
+        <div>
+          <p>{{field.name}} {{ error|escape}}</p>
+        </div>
+        {% endfor %} {% endfor %} {% endif %}
       </form>
     </div>
   </div>
