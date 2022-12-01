@@ -20,5 +20,6 @@ urlpatterns = [
     path('', include('aso.urls')),
     path('aso/', include('aso.urls')),
     path("admin/", admin.site.urls),
+    path('aso-chat/', include('aso_chat.urls')),
    
 ]
