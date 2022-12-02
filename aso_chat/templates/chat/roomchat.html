@@ -20,38 +20,99 @@
         <div class="card mb-sm-3 mb-md-0 contacts_card">
           <div class="card-body contacts_body">
             <ui class="contacts">
+              {% for room in joined_rooms %}
               <li>
-                <div class="d-flex bd-highlight">
-                  <div class="img_cont">
-                    <img
-                      src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
-                      class="rounded-circle user_img"
-                    />
-                    <span class="online_icon"></span>
-                  </div>
-                  <div class="user_info">
-                    <p>Kalid is online</p>
+                <div class="card" style="height: 8rem; margin-bottom: 1rem">
+                  <div class="card-body">
+                    <div class="d-flex bd-highlight">
+                      <div class="img_cont">
+                        <img
+                          src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
+                          class="rounded-circle user_img"
+                        />
+                      </div>
+
+                      <p style="color: white">{{room.name}}</p>
+                      <a href="/aso-chat/chat/{{room.slug}}">
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          style="
+                            margin-right: 1rem;
+                            margin-left: 1rem;
+                            height: 3rem;
+                          "
+                        >
+                          Enter
+                        </button>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </li>
-              <li>
-                <div class="d-flex bd-highlight">
-                  <div class="img_cont">
-                    <img
-                      src="https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg"
-                      class="rounded-circle user_img"
-                    />
-                    <span class="online_icon offline"></span>
-                  </div>
-                  <div class="user_info">
-                    <p>Taherah left 7 mins ago</p>
-                  </div>
-                </div>
-              </li>
+              {% endfor %}
             </ui>
           </div>
 
-          <div class="card-footer"></div>
+          <div class="card-footer">JOINED ROOM</div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xl-3 chat">
+        <div class="card mb-sm-3 mb-md-0 contacts_card">
+          <div class="card-body contacts_body">
+            <ui class="contacts">
+              {% for room in pending_rooms %}
+
+              <li>
+                <div class="card" style="height: 8rem; margin-bottom: 1rem">
+                  <div class="card-body">
+                    <div class="d-flex bd-highlight">
+                      <div class="img_cont">
+                        <img
+                          src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
+                          class="rounded-circle user_img"
+                        />
+                        <span class="online_icon"></span>
+                      </div>
+
+                      <p style="color: white">{{room.name}}</p>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        style="
+                          margin-right: 1rem;
+                          margin-left: 1rem;
+                          height: 3rem;
+                        "
+                      >
+                        Accept
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        style="height: 3rem"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              {% endfor %}
+            </ui>
+          </div>
+
+          <div class="card-footer">PENDING ROOMS</div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xl-3 chat">
+        <div class="card mb-sm-3 mb-md-0 contacts_card">
+          <div class="card-body contacts_body"></div>
+
+          <div class="card-footer">CREATE NEW ROOM</div>
         </div>
       </div>
     </div>
