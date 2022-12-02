@@ -16,7 +16,6 @@ def register(request):
             login(request, newUser)
             return redirect('home')
     else:
-        print("NUUUUU")
         registerForm = RegisterForm()
     
     return render(request, "chat/register.html", {'form':registerForm })
@@ -24,4 +23,9 @@ def register(request):
 def chat_box(request, chat_box_name):
     # we will get the chatbox name from the url
     chats = [ {"message": "ana are mere", "username": "claudiu"}]
-    return render(request, "chat/roomchat.html", {"chat_box_name": chat_box_name, "chats": chats})
+    return render(request, "chat/chatbox.html", {"chat_box_name": chat_box_name, "chats": chats})
+
+def rooms(request):
+    # we will get the chatbox name from the url
+    rooms = [ {"message": "ana are mere", "username": "claudiu"}]
+    return render(request, "chat/roomchat.html", {"rooms": rooms})

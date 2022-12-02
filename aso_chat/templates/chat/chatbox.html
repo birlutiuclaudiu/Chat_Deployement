@@ -1,76 +1,214 @@
-<html lang="en">
+{% extends "chat/base.html" %} {% block content %} {% block import %}
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+  integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+  crossorigin="anonymous"
+/>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css"
+/>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-</head>
-
-<body>
-  <div class="container">
-    <div class="row d-flex justify-content-center">
-        <div class="col-3">
-            <form>
-                <div class="form-group">
-                    <label for="exampleFormControlTextarea1" class="h4 pt-5">Chatbox</label>
-                    <textarea class="form-control" id="chat-text" readonly rows="10"></textarea><br>
+{% endblock %}
+<div class="container-login">
+  <div class="container-fluid h-100">
+    <div class="row justify-content-center h-100">
+      <div class="col-md-4 col-xl-3 chat">
+        <div class="card mb-sm-3 mb-md-0 contacts_card">
+          <div class="card-body contacts_body">
+            <ui class="contacts">
+              <li>
+                <div class="d-flex bd-highlight">
+                  <div class="img_cont">
+                    <img
+                      src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
+                      class="rounded-circle user_img"
+                    />
+                    <span class="online_icon"></span>
+                  </div>
+                  <div class="user_info">
+                    <p>Kalid is online</p>
+                  </div>
                 </div>
-                <div class="form-group">
-                    <input class="form-control" placeholder="Enter text here" id="input" type="text"></br>
+              </li>
+              <li>
+                <div class="d-flex bd-highlight">
+                  <div class="img_cont">
+                    <img
+                      src="https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg"
+                      class="rounded-circle user_img"
+                    />
+                    <span class="online_icon offline"></span>
+                  </div>
+                  <div class="user_info">
+                    <p>Taherah left 7 mins ago</p>
+                  </div>
                 </div>
-                <input class="btn btn-primary btn-lg btn-block" id="submit" type="button" value="Send">
-            </form>
+              </li>
+            </ui>
+          </div>
+
+          <div class="card-footer"></div>
         </div>
+      </div>
+
+      <div class="col-md-8 col-xl-6 chat">
+        <div class="card">
+          <div class="card-header msg_head">
+            <div class="d-flex bd-highlight">
+              <div class="user_info" id="writing">
+                <pid="writing"></p>
+              
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body msg_card_body">
+            <div id="conversation-chat">
+              {% for chat in chats %} {%if chat.username == request.user.username%}
+              <div class="d-flex justify-content-end mb-4">
+                <div class="img_cont_msg">
+                  <img
+                    src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
+                    class="rounded-circle user_img_msg"
+                  />
+                </div>
+                <div class="msg_cotainer_send">{{chat.message}}</div>
+              </div>
+                {% else %}
+                <div class="d-flex justify-content-start mb-4">
+                  <div class="img_cont_msg">
+                    <img
+                      src="https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg"
+                      class="rounded-circle user_img_msg"
+                    />
+                  </div>
+                  <div class="msg_cotainer_send">{{chat.message}}</div>
+                </div>
+                  {% endif %}
+        
+               
+                {% endfor%}
+              </div>
+           
+            </div>
+              <div class="card-footer">
+                <div class="input-group">
+                  <div class="input-group-append">
+                    <p class="input-group-text attach_btn">
+                      <i class="fas fa-paperclip"></i>
+                    </p>
+                  </div>
+                  <textarea
+                    name=""
+                    class="form-control type_msg"
+                    placeholder="Type your message..."
+                    id="input-text"
+                  ></textarea>
+                  <div class="input-group-append">
+                    <button class="input-group-text send_btn" id="send-message">
+                      <i class="fas fa-location-arrow"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{request.user.username|json_script:"user_username" }}
+      {{chat_box_name|json_script:"room-name" }}
+
+      <script>
+
+        const user_username = JSON.parse(document.getElementById("user_username").textContent);
+        const boxName = JSON.parse(
+          document.getElementById("room-name").textContent
+        );
+
+        const chatSocket = new WebSocket(
+          "ws://" + window.location.host + "/ws/chat/" + boxName + "/"
+        );
+
+        document.querySelector("#send-message").onclick = function (e) {
+          const messageInputDom = document.querySelector("#input-text");
+          const message = messageInputDom.value;
+          if(message == '')
+            return;
+          chatSocket.send(
+            JSON.stringify({
+              type: 'MESSAGE',
+              message: message,
+              username: user_username,
+            })
+          );
+          messageInputDom.value = "";
+        };
+
+        ///////////////////////////////////////////////define on message received ///////////////////////////////////////////////
+        chatSocket.onmessage = function (e) {
+          const data = JSON.parse(e.data);
+          //this case when a user is writing a message
+          if(data.type=='WRITING'){
+            if(data.username !==user_username){
+                const writing = document.querySelector("#writing");
+                writing.innerHTML = data.username + "...";
+            }
+            return;
+          }
+
+          if(data.type=='STOP_WRITING'){
+            writing.innerHTML = '';
+            return;
+          }
+
+          let to_insert_code = '';
+          
+          if(data.username == user_username)
+              to_insert_code +=' <div class="d-flex justify-content-end mb-4"> <div class="msg_cotainer_send">';
+          else
+              to_insert_code +=' <div class="d-flex justify-content-start mb-4"> <div class="msg_cotainer_send">';
+         
+          to_insert_code += data.message;
+          if(data.username == user_username)
+              to_insert_code += '</div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg" /> </div></div>';
+          else
+              to_insert_code +='</div><div class="img_cont_msg"><img src="https://2.bp.blogspot.com/-8ytYF7cfPkQ/WkPe1-rtrcI/AAAAAAAAGqU/FGfTDVgkcIwmOTtjLka51vineFBExJuSACLcBGAs/s320/31.jpg" class="rounded-circle user_img_msg" /> </div></div>';
+  
+         
+          
+         
+          const el = document.querySelector("#conversation-chat");
+          var div = document.createElement('div');
+          div.innerHTML = to_insert_code.trim();
+          el.append(div.firstChild);
+         
+        };
+
+        ////////////////////////////////define on change on text area //////////////////////////////////////////////////
+        let textArea = document.querySelector("#input-text");
+        textArea.addEventListener('keypress', checkcaret);
+        function checkcaret() {
+          chatSocket.send(
+            JSON.stringify({
+              type: 'WRITING',
+              username: user_username,
+            })
+          );
+        }
+        textArea.onchange = function(e){
+          chatSocket.send(
+            JSON.stringify({
+              type: 'STOP_WRITING',
+            })
+          );
+        }
+      </script>
     </div>
 </div>
-{% comment %} Get data for username and chatbox name{% endcomment %}
-{{ request.user.username|json_script:"user_username" }}
-{{ chat_box_name|json_script:"room-name" }}
-
-<script>
-  const user_username = JSON.parse(document.getElementById('user_username').textContent);
-  document.querySelector('#submit').onclick = function (e) {
-     const messageInputDom = document.querySelector('#input');
-     const message = messageInputDom.value;
-     chatSocket.send(JSON.stringify({
-         'message': message,
-         'username': user_username,
-     }));
-     messageInputDom.value = '';
-  };
-
-  const boxName = JSON.parse(document.getElementById('room-name').textContent);
-
-  const chatSocket = new WebSocket(
-     'ws://' +
-     window.location.host +
-     '/ws/chat/' +
-     boxName +
-     '/'
-  );
-
-  chatSocket.onmessage = function (e) {
-     const data = JSON.parse(e.data);
-     document.querySelector('#chat-text').value += (data.message + ' sent by ' + data.username   + '\n') // add message to text box
-  }
-</script>
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
-</script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
-</script>
-   
-</body>
-
-</html>
+</div>
+    {% endblock %}
