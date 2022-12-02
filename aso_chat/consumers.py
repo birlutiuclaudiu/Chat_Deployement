@@ -17,7 +17,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
         username = text_data_json["username"]
-
+        print(message)
         await self.channel_layer.group_send(
             self.group_name,
             {
