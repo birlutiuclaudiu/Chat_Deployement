@@ -10,6 +10,12 @@ body {
 	justify-content: center;
 	min-height: 100vh;
 }
+.container_chats {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+}
 
 .screen {		
 	background: linear-gradient(90deg, #5D54A4, #7C78B8);		
@@ -194,3 +200,22 @@ hr {
   ::-webkit-scrollbar-thumb:hover {
 	background: #555; 
   }
+
+
+  #chat3 .form-control {
+    border-color: transparent;
+    }
+    
+    #chat3 .form-control:focus {
+    border-color: transparent;
+    box-shadow: inset 0px 0px 0px 1px transparent;
+    }
+    
+    .badge-dot {
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    margin-left: 2.9rem;
+    margin-top: -.75rem;
+}
+
