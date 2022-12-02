@@ -37,10 +37,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "channels",
     "aso",
     "aso_chat",
-    "channels",
+    
 ]
+
+ASGI_APPLICATION = "claudiu_first_site.asgi.application"
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -70,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "claudiu_first_site.wsgi.application"
+#WSGI_APPLICATION = "claudiu_first_site.wsgi.application"
 
 
 # Database
@@ -82,7 +86,7 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
+ 
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -133,9 +137,15 @@ LOGIN_URL = "/aso-chat/login/"
 
 
 # websockets  
-ASGI_APPLICATION = "claudiu_first_site.routing.application" #routing.py will be created later
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': "channels.layers.InMemoryChannelLayer"
         }
+}
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
 }
