@@ -1,10 +1,11 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-
-
-# This comnsumer was creted using this tutorial 
+from asgiref.sync import sync_to_async
+from .models import Room, Message
+from django.contrib.auth.models import User
+# This comnsumer was creted using these tutorials 
 # https://www.honeybadger.io/blog/django-channels-websockets-chat/
-
+# https://www.youtube.com/watch?v=SF1k_Twr9cg   
 
 class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -23,6 +24,9 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         if text_data_json["type"] == 'MESSAGE':
             message = text_data_json["message"]
             username = text_data_json["username"]
+            chat_box_name=text_data_json["chat_box_name"]
+            await self.persistence_messages(chat_box_name, message, username)
+
             await self.channel_layer.group_send(
             self.group_name,
                 {
@@ -82,5 +86,13 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+
+
+    @sync_to_async
+    def persistence_messages(self, slug_room, message, username):
+        user = User.objects.filter(username = username).first()
+        room = Room.objects.filter(slug=slug_room).first()
+        messagePersist = Message(user = user, room=room, message = message)
+        messagePersist.save()
 
     pass

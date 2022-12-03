@@ -30,7 +30,7 @@
 
           <div class="card-body msg_card_body">
             <div id="conversation-chat">
-              {% for chat in chats %} {%if chat.username == request.user.username%}
+              {% for chat in chats %} {%if chat.user.username == request.user.username%}
               <div class="d-flex justify-content-end mb-4">
                 <div class="img_cont_msg">
                   <img
@@ -106,6 +106,7 @@
               type: 'MESSAGE',
               message: message,
               username: user_username,
+              chat_box_name: boxName,
             })
           );
           messageInputDom.value = "";

@@ -24,7 +24,8 @@ def register(request):
 
 def chat_box(request, chat_box_name):
     # we will get the chatbox name from the url
-    chats = [ {"message": "ana are mere", "username": "claudiu"}]
+    room = Room.objects.filter(slug=chat_box_name).first()
+    chats = Message.objects.filter(room=room)
     return render(request, "chat/chatbox.html", {"chat_box_name": chat_box_name, "chats": chats})
 
 @login_required
