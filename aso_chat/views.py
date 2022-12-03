@@ -16,7 +16,7 @@ def register(request):
         if(registerForm.is_valid()):
             newUser = registerForm.save()
             login(request, newUser)
-            return redirect('home')
+            return redirect('rooms')
     else:
         registerForm = RegisterForm()
     
@@ -52,3 +52,24 @@ def rooms(request):
         else:
             pending_rooms.append(r.room)
     return render(request, "chat/roomchat.html", {"pending_rooms": pending_rooms, "joined_rooms": joined_rooms, "form": form})
+
+@login_required
+def invite_rooms(request):
+    if request.method == 'POST':
+        form = RoomForm(request.POST)
+        
+        if form.is_valid():
+            room  = form.save(commit=False)
+            room.created_by = request.user
+            room.save()
+            return redirect('rooms')
+    else:
+        form = RoomForm()
+    # we will get the chatbox name from the url
+    rooms_registration = RoomRegistration.objects.filter(user=request.user, status='JOINED')
+
+    joined_rooms = []
+    for r in rooms_registration:
+       joined_rooms.append(r.room)
+       
+    return render(request, "chat/inviteroom.html", {"joined_rooms": joined_rooms, "form": form})

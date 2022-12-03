@@ -133,7 +133,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Login and logout part 
 LOGOUT_REDIRECT_URL = "/aso-chat/login/"
-LOGIN_REDIRECT_URL = "/aso-chat/"
+LOGIN_REDIRECT_URL = "/aso-chat/rooms"
 LOGIN_URL = "/aso-chat/login/"
 
 

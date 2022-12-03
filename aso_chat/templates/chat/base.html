@@ -19,17 +19,20 @@
         <div containder>
           <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-              {% block navbar %}
-
+              {% block navbar %} {% if request.user.is_authenticated %}
               <li class="nav-item">
-                {% if request.user.is_authenticated %}
                 <a class="nav-link" href="/aso-chat/logout">Log out</a>
-                {% else %}
-                <a class="nav-link" href="#">haha</a>
-                {% endif %}
               </li>
-
-              {% endblock %}
+              <li class="nav-item">
+                <a class="nav-link" href="/aso-chat/rooms">Rooms</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/aso-chat/invite-rooms">Invite Rooms</a
+                > </li>
+                {% else %}
+                Welcome
+                {% endif %} {% endblock %}
+              </li>
             </ul>
           </div>
         </div>
