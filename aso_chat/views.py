@@ -22,18 +22,25 @@ def register(request):
     
     return render(request, "chat/register.html", {'form':registerForm })
 
+@login_required
 def chat_box(request, chat_box_name):
     # we will get the chatbox name from the url
     if request.method == 'POST':
         form = MessageForm(request.POST, request.FILES)
+       
         if(form.is_valid()):
-            form.save()
-            return redirect('chat_box')
+            message = form.save(commit= False)
+            room = Room.objects.filter(slug=chat_box_name).first()
+            message.room = room
+            message.user = request.user
+            print(message.image)
+            message.save()
+            return redirect('chat', chat_box_name)
     else:
         form = MessageForm()
     room = Room.objects.filter(slug=chat_box_name).first()
     chats = Message.objects.filter(room=room)
-    return render(request, "chat/chatbox.html", {"chat_box_name": chat_box_name, "chats": chats})
+    return render(request, "chat/chatbox.html", {"chat_box_name": chat_box_name, "chats": chats, "form": form})
 
 @login_required
 def rooms(request):

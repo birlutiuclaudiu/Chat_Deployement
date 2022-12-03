@@ -23,4 +23,4 @@ class RoomRegistrationForm(ModelForm):
 class MessageForm(ModelForm): 
     class Meta: 
         model = Message
-        fields = ['user', 'room', 'message', 'image']
+        fields = [ 'message', 'image']

@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div class="card-body msg_card_body">
+          <div class="card-body msg_card_body" id="to_scroll">
             <div id="conversation-chat">
               {% for chat in chats %} {%if chat.user.username == request.user.username%}
               <div class="d-flex justify-content-end mb-4">
@@ -38,7 +38,12 @@
                     class="rounded-circle user_img_msg"
                   />
                 </div>
-                <div class="msg_cotainer_send">{{chat.message}}</div>
+                <div class="msg_cotainer_send">{{chat.message}}
+                  {% if chat.image %} <br/>
+                  <img src="{{ chat.image.url }}" class="img-responsive" style="height: 10rem; " />
+                {% endif %}
+                </div>
+               
               </div>
                 {% else %}
                 <div class="d-flex justify-content-start mb-4">
@@ -48,7 +53,11 @@
                       class="rounded-circle user_img_msg"
                     />
                   </div>
-                  <div class="msg_cotainer_send">{{chat.message}}</div>
+                  <div class="msg_cotainer_send">{{chat.message}}
+                    {% if chat.image %} <br/>
+                    <img src="{{ chat.image.url }}" class="img-responsive" style="height: 10rem; " />
+                  {% endif %}
+                  </div>
                 </div>
                   {% endif %}
         
@@ -59,21 +68,29 @@
             </div>
               <div class="card-footer">
                 <div class="input-group">
-                  <div class="input-group-append">
-                    <input type="file" name="upload" class="input-group-text attach_btn" accept=".jpg, .jpeg, .png">
-                   
-                  </div>
-                  <textarea
-                    name=""
+                  <form method ="post" action="."  class="input-group" enctype="multipart/form-data">
+                    {% csrf_token %}
+                 
+                  <input type="file" name="image" id="image" class="input-group-text attach_btn" accept=".jpg, .jpeg, .png">  
+                  <input
+                    type="text"
+                    name="message"
                     class="form-control type_msg"
                     placeholder="Type your message..."
                     id="input-text"
-                  ></textarea>
+                  />
                   <div class="input-group-append">
-                    <button class="input-group-text send_btn" id="send-message">
+                    <button type="submit" class="input-group-text send_btn" id="send-message">
                       <i class="fas fa-location-arrow"></i>
                     </button>
                   </div>
+                </form>
+                {% if form.errors %} {% for field in form %} 
+                      {% for error in field.errors %}
+                          <div>
+                            <p>{{field.name}} {{ error|escape}}</p>
+                          </div>
+                {% endfor %} {% endfor %} {% endif %}
                 </div>
               </div>
             </div>
@@ -85,7 +102,8 @@
       {{chat_box_name|json_script:"room-name" }}
 
       <script>
-
+        const to_scroll = document.querySelector("#to_scroll"); 
+        to_scroll.scrollTop = to_scroll.scrollHeight;
         const user_username = JSON.parse(document.getElementById("user_username").textContent);
         const boxName = JSON.parse(
           document.getElementById("room-name").textContent
@@ -98,18 +116,19 @@
         document.querySelector("#send-message").onclick = function (e) {
           const messageInputDom = document.querySelector("#input-text");
           const message = messageInputDom.value;
+          const imageDom = document.querySelector("#image");
           if(message == '')
             return;
           chatSocket.send(
             JSON.stringify({
               type: 'MESSAGE',
-              
+              image: imageDom===null || imageDom.image==''? "NO":"YES",
               message: message,
               username: user_username,
               chat_box_name: boxName,
             })
           );
-          messageInputDom.value = "";
+         
         };
 
         ///////////////////////////////////////////////define on message received ///////////////////////////////////////////////
@@ -137,6 +156,11 @@
               to_insert_code +=' <div class="d-flex justify-content-start mb-4"> <div class="msg_cotainer_send">';
          
           to_insert_code += data.message;
+          to_insert_code += ' ';
+          if(data.image ==="YES")
+              to_insert_code +=  '<image refresh the page>';
+          
+         
           if(data.username == user_username)
               to_insert_code += '</div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg" /> </div></div>';
           else
@@ -149,6 +173,9 @@
           var div = document.createElement('div');
           div.innerHTML = to_insert_code.trim();
           el.append(div.firstChild);
+          const to_scroll = document.querySelector("#to_scroll"); 
+          to_scroll.scrollTop = to_scroll.scrollHeight;
+
          
         };
 

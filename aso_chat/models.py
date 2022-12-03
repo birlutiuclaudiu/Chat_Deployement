@@ -18,7 +18,7 @@ class Message(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE) 
     message = models.CharField(max_length=1000,blank=False)
     published_at = models.DateTimeField(auto_now_add = True)
-    image = models.ImageField(upload_to='images/', blank=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
 
     class Meta:
         ordering = ('published_at',)

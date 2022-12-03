@@ -25,15 +25,14 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
             message = text_data_json["message"]
             username = text_data_json["username"]
             chat_box_name=text_data_json["chat_box_name"]
-            image=text_data_json["photo"]
-            await self.persistence_messages(chat_box_name, message, username,image)
-
+            image=text_data_json["image"]
             await self.channel_layer.group_send(
             self.group_name,
                 {
                 "type": "chatbox_message",
                 "message": message,
                 "username": username,
+                "image": image,
             },
             )
         elif text_data_json["type"] == 'WRITING' :
@@ -57,12 +56,14 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def chatbox_message(self, event):
         message = event["message"]
         username = event["username"]
+        image = event["image"]
         #send message and username of sender to websocket
         await self.send(
             text_data=json.dumps(
                 {   "type": "MESSAGE",
                     "message": message,
                     "username": username,
+                    "image" : image
                 }
             )
         )
@@ -90,18 +91,11 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 
 
     @sync_to_async
-    def persistence_messages(self, slug_room, message, username, image):
+    def persistence_messages(self, slug_room, message, username):
         user = User.objects.filter(username = username).first()
         room = Room.objects.filter(slug=slug_room).first()
-        messagePersist = None
-        print(image)
-        image = "/home/birlutiuclaudiu/Pictures/profile.jpg"
-        print(image)
-        if image=='':
-            messagePersist = Message(user = user, room=room, message = message)
-        else:
-            messagePersist = Message(user = user, room=room, message = message, image=image)
-        
+     
+        messagePersist = Message(user = user, room=room, message = message)
         messagePersist.save()
 
     pass
