@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 
-from .forms.forms import RegisterForm, RoomForm
+from .forms.forms import RegisterForm, RoomForm, RoomRegistrationForm
 from .models import Room, RoomRegistration, Message
 
 def home(request):
@@ -56,15 +56,15 @@ def rooms(request):
 @login_required
 def invite_rooms(request):
     if request.method == 'POST':
-        form = RoomForm(request.POST)
+        form = RoomRegistrationForm(request.POST)
         
         if form.is_valid():
-            room  = form.save(commit=False)
-            room.created_by = request.user
-            room.save()
-            return redirect('rooms')
+            room_reg  = form.save(commit=False)
+            room_reg.status = 'PENDING'
+            room_reg.save()
+            return redirect('invite-rooms')
     else:
-        form = RoomForm()
+        form = RoomRegistrationForm()
     # we will get the chatbox name from the url
     rooms_registration = RoomRegistration.objects.filter(user=request.user, status='JOINED')
 
@@ -73,3 +73,20 @@ def invite_rooms(request):
        joined_rooms.append(r.room)
        
     return render(request, "chat/inviteroom.html", {"joined_rooms": joined_rooms, "form": form})
+
+@login_required
+def pending_rooms(request, slug, option):
+    ##delete or update the pending options
+    rooms = Room.objects.filter(slug=slug)
+    if len(rooms)==1:
+        room = rooms[0]
+        room_registrations = RoomRegistration.objects.filter(user=request.user, room=room)
+        room_registration = room_registrations.first()
+        if room_registration:
+            if option=='accepted':
+                room_registration.status = 'JOINED'
+                room_registration.save()
+            else:
+                room_registration.delete();
+        
+    return redirect('rooms')

@@ -77,24 +77,28 @@
                       </div>
 
                       <p style="color: white">{{room.name}}</p>
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        style="
-                          margin-right: 1rem;
-                          margin-left: 1rem;
-                          height: 3rem;
-                        "
+                      <a href="{{room.slug}}/accepted/">
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          style="
+                            margin-right: 1rem;
+                            margin-left: 1rem;
+                            height: 3rem;
+                          "
+                        >
+                          Accept
+                        </button>
+                      </a>
+                      <a href="{{room.slug}}/rejected/">
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          style="height: 3rem"
+                        >
+                          Delete
+                        </button></a
                       >
-                        Accept
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-danger"
-                        style="height: 3rem"
-                      >
-                        Delete
-                      </button>
                     </div>
                   </div>
                 </div>

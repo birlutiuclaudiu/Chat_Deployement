@@ -10,6 +10,8 @@ class Room(models.Model):
     created_by = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
     name = models.CharField(max_length=20, unique=True, blank="False")
     slug = models.SlugField(max_length = 250, null = False, unique=True, blank = False)
+    def __str__(self):
+        return self.name
 
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE) 

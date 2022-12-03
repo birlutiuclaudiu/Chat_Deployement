@@ -12,5 +12,6 @@ urlpatterns = [
     path("chat/<str:chat_box_name>/", views.chat_box, name="chat"),
     path("rooms/", views.rooms, name="rooms"),
     path("invite-rooms/", views.invite_rooms, name="invite-rooms"),
+    path("rooms/<str:slug>/<str:option>/", views.pending_rooms, name="invitation"),
     
 ]
