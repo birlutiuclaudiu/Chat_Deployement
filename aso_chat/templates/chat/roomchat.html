@@ -110,7 +110,26 @@
 
       <div class="col-md-4 col-xl-3 chat">
         <div class="card mb-sm-3 mb-md-0 contacts_card">
-          <div class="card-body contacts_body"></div>
+          <div class="card-body contacts_body">
+            <form method="post" action=".">
+              {% csrf_token %}
+              <input type="text" class="text" name="name" />
+              <span>Name</span>
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style="margin-top: 1rem; margin-left: 3rem"
+              >
+                Create
+              </button>
+            </form>
+            {% if form.errors %} {% for field in form %} {% for error in field.errors %}
+            <div>
+              <p>{{field.name}} {{ error|escape}}</p>
+            </div>
+            {% endfor %} {% endfor %} {% endif %}
+          </div>
 
           <div class="card-footer">CREATE NEW ROOM</div>
         </div>

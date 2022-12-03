@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from django.db.models.signals import pre_save
-
+from django.db.models.signals import pre_save, post_save
+from claudiu_first_site.util import unique_slug_generator
 
 # Create your models here.
 
@@ -31,3 +31,10 @@ class RoomRegistration(models.Model):
 def pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
+
+##save the first user in registration table
+@receiver(post_save, sender=Room)
+def post_save_receiver(sender, instance, *args, **kwargs):
+    roomRegistration = RoomRegistration( status='JOINED', room=instance, user=instance.created_by)
+    roomRegistration.save()
+   
