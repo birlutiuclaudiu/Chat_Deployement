@@ -25,7 +25,8 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
             message = text_data_json["message"]
             username = text_data_json["username"]
             chat_box_name=text_data_json["chat_box_name"]
-            await self.persistence_messages(chat_box_name, message, username)
+            image=text_data_json["photo"]
+            await self.persistence_messages(chat_box_name, message, username,image)
 
             await self.channel_layer.group_send(
             self.group_name,
@@ -89,10 +90,18 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 
 
     @sync_to_async
-    def persistence_messages(self, slug_room, message, username):
+    def persistence_messages(self, slug_room, message, username, image):
         user = User.objects.filter(username = username).first()
         room = Room.objects.filter(slug=slug_room).first()
-        messagePersist = Message(user = user, room=room, message = message)
+        messagePersist = None
+        print(image)
+        image = "/home/birlutiuclaudiu/Pictures/profile.jpg"
+        print(image)
+        if image=='':
+            messagePersist = Message(user = user, room=room, message = message)
+        else:
+            messagePersist = Message(user = user, room=room, message = message, image=image)
+        
         messagePersist.save()
 
     pass

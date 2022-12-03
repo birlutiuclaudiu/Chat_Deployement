@@ -60,9 +60,8 @@
               <div class="card-footer">
                 <div class="input-group">
                   <div class="input-group-append">
-                    <p class="input-group-text attach_btn">
-                      <i class="fas fa-paperclip"></i>
-                    </p>
+                    <input type="file" name="upload" class="input-group-text attach_btn" accept=".jpg, .jpeg, .png">
+                   
                   </div>
                   <textarea
                     name=""
@@ -104,6 +103,7 @@
           chatSocket.send(
             JSON.stringify({
               type: 'MESSAGE',
+              
               message: message,
               username: user_username,
               chat_box_name: boxName,

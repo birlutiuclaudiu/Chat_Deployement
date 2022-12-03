@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 
-from .forms.forms import RegisterForm, RoomForm, RoomRegistrationForm
+from .forms.forms import RegisterForm, RoomForm, RoomRegistrationForm, MessageForm
 from .models import Room, RoomRegistration, Message
 
 def home(request):
@@ -24,6 +24,13 @@ def register(request):
 
 def chat_box(request, chat_box_name):
     # we will get the chatbox name from the url
+    if request.method == 'POST':
+        form = MessageForm(request.POST, request.FILES)
+        if(form.is_valid()):
+            form.save()
+            return redirect('chat_box')
+    else:
+        form = MessageForm()
     room = Room.objects.filter(slug=chat_box_name).first()
     chats = Message.objects.filter(room=room)
     return render(request, "chat/chatbox.html", {"chat_box_name": chat_box_name, "chats": chats})

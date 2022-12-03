@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm, RadioSelect,MultipleChoiceField
 
-from aso_chat.models import Room, RoomRegistration
+from aso_chat.models import Room, RoomRegistration, Message
 
 class RegisterForm(UserCreationForm):
     class Meta: 
@@ -19,3 +19,8 @@ class RoomRegistrationForm(ModelForm):
     class Meta: 
         model = RoomRegistration
         fields = ['user', 'room']
+
+class MessageForm(ModelForm): 
+    class Meta: 
+        model = Message
+        fields = ['user', 'room', 'message', 'image']
