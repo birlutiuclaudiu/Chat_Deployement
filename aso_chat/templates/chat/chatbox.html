@@ -42,6 +42,8 @@
                   {% if chat.image %} <br/>
                   <img src="{{ chat.image.url }}" class="img-responsive" style="height: 10rem; " />
                 {% endif %}
+                <br/>
+                <p style="color:white; font-size:12px"> {{chat.published_at}} </p>
                 </div>
                
               </div>
@@ -57,6 +59,8 @@
                     {% if chat.image %} <br/>
                     <img src="{{ chat.image.url }}" class="img-responsive" style="height: 10rem; " />
                   {% endif %}
+                  <br/>
+                  <p style="color:white; font-size:12px"> {{chat.published_at}} </p>
                   </div>
                 </div>
                   {% endif %}
@@ -70,7 +74,7 @@
                 <div class="input-group">
                   <form method ="post" action="."  class="input-group" enctype="multipart/form-data">
                     {% csrf_token %}
-                  <input type="file" name="image" id="image-field" class="input-group-text attach_btn" accept=".jpg, .jpeg, .png">  
+                  <input type="file" name="image" id="image_field" class="input-group-text attach_btn" accept=".jpg, .jpeg, .png">  
                   <input
                     type="text"
                     name="message"
@@ -115,17 +119,17 @@
         document.querySelector("#send-message").onclick = function (e) {
           const messageInputDom = document.querySelector("#input-text");
           const message = messageInputDom.value;
-          const imageDom = document.querySelector("#image-field");
-          let image = "YES";
-          if(imageDom===null || imageDom.value ===null || imageDom.value === ''){
-              image = "NO";
+          const imageDom = document.querySelector("#image_field");
+          let imageTxt = "||image -refresh||";
+          if(imageDom ===null || imageDom.value ===null || imageDom.value===''){
+              imageTxt = '';
           }
           if(message == '')
             return;
           chatSocket.send(
             JSON.stringify({
               type: 'MESSAGE',
-              image: image,
+              image: imageTxt,
               message: message,
               username: user_username,
               chat_box_name: boxName,
@@ -159,9 +163,10 @@
               to_insert_code +=' <div class="d-flex justify-content-start mb-4"> <div class="msg_cotainer_send">';
          
           to_insert_code += data.message;
-          console.log(data.image)
-          if (data.image.equals("YES"))
-              to_insert_code+= '<image>';
+          to_insert_code+= data.image;
+          to_insert_code +=  '<br/> <p style="color:white; font-size:12px">';
+          to_insert_code += {{chat.published_at}};
+          to_insert_code += '</p>';
           
           if(data.username == user_username)
               to_insert_code += '</div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg" /> </div></div>';

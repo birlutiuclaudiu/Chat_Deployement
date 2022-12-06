@@ -20,12 +20,12 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 
     # This function receive messages from WebSocket.
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        if text_data_json["type"] == 'MESSAGE':
-            message = text_data_json["message"]
-            username = text_data_json["username"]
-            chat_box_name=text_data_json["chat_box_name"]
-            image=text_data_json["image"]
+        json_object = json.loads(text_data)
+        if json_object["type"] == 'MESSAGE':
+            message = json_object["message"]
+            username = json_object["username"]
+            chat_box_name=json_object["chat_box_name"]
+            image=json_object["image"]
             await self.channel_layer.group_send(
             self.group_name,
                 {
@@ -35,8 +35,8 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 "image": image,
             },
             )
-        elif text_data_json["type"] == 'WRITING' :
-            username = text_data_json["username"]
+        elif json_object["type"] == 'WRITING' :
+            username = json_object["username"]
             await self.channel_layer.group_send(
             self.group_name,
                 {
@@ -44,7 +44,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 "username": username,
             },
             )
-        elif text_data_json["type"] == 'STOP_WRITING':
+        elif json_object["type"] == 'STOP_WRITING':
             await self.channel_layer.group_send(
             self.group_name,
                 {
@@ -57,13 +57,14 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         message = event["message"]
         username = event["username"]
         image = event["image"]
+        print(image)
         #send message and username of sender to websocket
         await self.send(
             text_data=json.dumps(
                 {   "type": "MESSAGE",
                     "message": message,
                     "username": username,
-                    "image" : str(image),
+                    "image" : image,
                 }
             )
         )
@@ -88,14 +89,4 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
-
-
-    @sync_to_async
-    def persistence_messages(self, slug_room, message, username):
-        user = User.objects.filter(username = username).first()
-        room = Room.objects.filter(slug=slug_room).first()
-     
-        messagePersist = Message(user = user, room=room, message = message)
-        messagePersist.save()
-
     pass
