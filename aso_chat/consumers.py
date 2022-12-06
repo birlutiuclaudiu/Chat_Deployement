@@ -63,7 +63,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
                 {   "type": "MESSAGE",
                     "message": message,
                     "username": username,
-                    "image" : image
+                    "image" : str(image),
                 }
             )
         )

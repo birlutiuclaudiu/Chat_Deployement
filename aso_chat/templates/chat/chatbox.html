@@ -70,8 +70,7 @@
                 <div class="input-group">
                   <form method ="post" action="."  class="input-group" enctype="multipart/form-data">
                     {% csrf_token %}
-                 
-                  <input type="file" name="image" id="image" class="input-group-text attach_btn" accept=".jpg, .jpeg, .png">  
+                  <input type="file" name="image" id="image-field" class="input-group-text attach_btn" accept=".jpg, .jpeg, .png">  
                   <input
                     type="text"
                     name="message"
@@ -116,13 +115,17 @@
         document.querySelector("#send-message").onclick = function (e) {
           const messageInputDom = document.querySelector("#input-text");
           const message = messageInputDom.value;
-          const imageDom = document.querySelector("#image");
+          const imageDom = document.querySelector("#image-field");
+          let image = "YES";
+          if(imageDom===null || imageDom.value ===null || imageDom.value === ''){
+              image = "NO";
+          }
           if(message == '')
             return;
           chatSocket.send(
             JSON.stringify({
               type: 'MESSAGE',
-              image: imageDom===null || imageDom.image==''? "NO":"YES",
+              image: image,
               message: message,
               username: user_username,
               chat_box_name: boxName,
@@ -156,11 +159,10 @@
               to_insert_code +=' <div class="d-flex justify-content-start mb-4"> <div class="msg_cotainer_send">';
          
           to_insert_code += data.message;
-          to_insert_code += ' ';
-          if(data.image ==="YES")
-              to_insert_code +=  '<image refresh the page>';
+          console.log(data.image)
+          if (data.image.equals("YES"))
+              to_insert_code+= '<image>';
           
-         
           if(data.username == user_username)
               to_insert_code += '</div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg" /> </div></div>';
           else
