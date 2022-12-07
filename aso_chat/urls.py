@@ -7,7 +7,7 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('register/', views.register, name='register'),
-    path('logout/', authentication_views.LogoutView.as_view(), name='logout'),
+    path('logout/',  views.logout_view, name='logout'),
     path("login/", authentication_views.LoginView.as_view(template_name="chat/login.html"), name="login"),
     path("chat/<str:chat_box_name>/", views.chat_box, name="chat"),
     path("rooms/", views.rooms, name="rooms"),

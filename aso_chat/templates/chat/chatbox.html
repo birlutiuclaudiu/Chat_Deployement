@@ -163,10 +163,7 @@
               to_insert_code +=' <div class="d-flex justify-content-start mb-4"> <div class="msg_cotainer_send">';
          
           to_insert_code += data.message;
-          to_insert_code+= data.image;
-          to_insert_code +=  '<br/> <p style="color:white; font-size:12px">';
-          to_insert_code += {{chat.published_at}};
-          to_insert_code += '</p>';
+          to_insert_code += data.image;
           
           if(data.username == user_username)
               to_insert_code += '</div><div class="img_cont_msg"><img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg" /> </div></div>';

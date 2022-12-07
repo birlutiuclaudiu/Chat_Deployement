@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "channels",
     "aso",
     "aso_chat",
+    'online_users',
     
 ]
 
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'online_users.middleware.OnlineNowMiddleware',
 ]
 
 ROOT_URLCONF = "claudiu_first_site.urls"
@@ -154,3 +156,12 @@ CHANNEL_LAYERS = {
 #########################################   FOR  IMAGE  ###############################
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+###############################################MAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'birlutiuclaudiuc@gmail.com'
+EMAIL_HOST_PASSWORD = 

@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.models import User
 from .forms.forms import RegisterForm, RoomForm, RoomRegistrationForm, MessageForm
 from .models import Room, RoomRegistration, Message
-
+from django.contrib.auth import logout
+from .util import is_online, sendEmail
+@login_required
 def home(request):
      return render(request, "chat/home.html", {})
 
@@ -22,6 +24,10 @@ def register(request):
     
     return render(request, "chat/register.html", {'form':registerForm })
 
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
 @login_required
 def chat_box(request, chat_box_name):
     # we will get the chatbox name from the url
@@ -33,8 +39,12 @@ def chat_box(request, chat_box_name):
             room = Room.objects.filter(slug=chat_box_name).first()
             message.room = room
             message.user = request.user
-            print(message.image)
             message.save()
+            #check the offline users 
+            registrations = RoomRegistration.objects.filter(room = room, status='JOINED')
+            offline_users_from_room = [registration.user for registration in registrations if not(is_online(registration.user))]
+            for user in offline_users_from_room:
+                sendEmail(user.username, message.message)
             return redirect('chat', chat_box_name)
     else:
         form = MessageForm()
