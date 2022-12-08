@@ -112,6 +112,6 @@ def pending_rooms(request, slug, option):
                 room_registration.status = 'JOINED'
                 room_registration.save()
             else:
-                room_registration.delete();
+                room_registration.delete()
         
     return redirect('rooms')
