@@ -37,7 +37,7 @@
                     class="rounded-circle user_img_msg"
                   />
                 </div>
-                <div class="msg_cotainer_send">{{chat.message}}
+                <div class="msg_cotainer_send">me:{{chat.message}}
                   {% if chat.image %} <br/>
                   <img src="{{ chat.image.url }}" class="img-responsive" style="height: 10rem; " />
                 {% endif %}
@@ -54,7 +54,7 @@
                       class="rounded-circle user_img_msg"
                     />
                   </div>
-                  <div class="msg_cotainer_send">{{chat.message}}
+                  <div class="msg_cotainer_send">{{chat.user.username}}:{{chat.message}}
                     {% if chat.image %} <br/>
                     <img src="{{ chat.image.url }}" class="img-responsive" style="height: 10rem; " />
                   {% endif %}
