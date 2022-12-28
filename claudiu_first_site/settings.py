@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-import os 
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,13 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-0w^26a0@@fsftokic740kps^k7k7$4bk*0#=ja^v0l^#*3s@t8"
-
+SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+DEBUG = int(os.environ.get("DEBUG", default=0))
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -42,7 +39,7 @@ INSTALLED_APPS = [
     "aso",
     "aso_chat",
     'online_users',
-    
+
 ]
 
 ASGI_APPLICATION = "claudiu_first_site.asgi.application"
@@ -77,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-#WSGI_APPLICATION = "claudiu_first_site.wsgi.application"
+# WSGI_APPLICATION = "claudiu_first_site.wsgi.application"
 
 
 # Database
@@ -85,11 +82,15 @@ TEMPLATES = [
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": os.environ.get("SQL_USER", "user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
- 
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -133,17 +134,17 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-# Login and logout part 
+# Login and logout part
 LOGOUT_REDIRECT_URL = "/aso-chat/login/"
 LOGIN_REDIRECT_URL = "/aso-chat/rooms"
 LOGIN_URL = "/aso-chat/login/"
 
 
-# websockets  
+# websockets
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': "channels.layers.InMemoryChannelLayer"
-        }
+    }
 }
 
 
@@ -154,14 +155,14 @@ CHANNEL_LAYERS = {
 }
 
 #########################################   FOR  IMAGE  ###############################
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-###############################################MAIL
+# MAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'birlutiuclaudiuc@gmail.com'
-EMAIL_HOST_PASSWORD =
+EMAIL_HOST_PASSWORD = 'sss'
