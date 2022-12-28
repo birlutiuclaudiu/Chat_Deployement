@@ -169,3 +169,6 @@ EMAIL_HOST_PASSWORD = 'sss'
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:1337/",
                         "https://localhost:1337/", "http://localhost:1337/**"]
+
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
