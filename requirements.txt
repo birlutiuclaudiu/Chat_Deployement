@@ -1,5 +1,7 @@
 Django==4.0
 channels==3.0.4
+Pillow==4.3.0
 django-online-users==0.3
 psycopg2-binary==2.9.1
-Pillow==4.3.0
+gunicorn==20.1.0
+
