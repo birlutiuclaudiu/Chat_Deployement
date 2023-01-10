@@ -20,13 +20,16 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.prod.db
-  
+
   nginx:
     build: ./nginx
     volumes:
       - static_volume:/home/app/web/staticfiles
+      - ./nginx/chat.com.crt:/etc/nginx/chat.com.crt # New Line!
+      - ./nginx/chat.com.key:/etc/nginx/chat.com.key # New Line!
     ports:
       - 1337:82
+      - "443:443"
     depends_on:
       - web
 
