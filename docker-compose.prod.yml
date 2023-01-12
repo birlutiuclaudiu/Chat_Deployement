@@ -25,8 +25,8 @@ services:
     build: ./nginx
     volumes:
       - static_volume:/home/app/web/staticfiles
-      - ./nginx/chat.com.crt:/etc/nginx/chat.com.crt # New Line!
-      - ./nginx/chat.com.key:/etc/nginx/chat.com.key # New Line!
+      - ./nginx/chat.com.crt:/etc/nginx/chat.com.crt
+      - ./nginx/chat.com.key:/etc/nginx/chat.com.key  
     ports:
       - 1337:82
       - "443:443"
