@@ -168,7 +168,7 @@ EMAIL_HOST_USER = 'birlutiuclaudiuc@gmail.com'
 EMAIL_HOST_PASSWORD = 'sss'
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:1337/",
-                        "https://localhost:1337/", "http://localhost:1337/**"]
+                        "https://localhost:1337/", "http://localhost:1337/**", "https://localhost/**"]
 
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
